@@ -18,7 +18,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 public class UserServiceImplTest {
 
     @Test
-    public void calculateTimeZoneAge(){
+    public void calculateTimeZoneAge() {
         UserRepositoryInterface mockUserRepo = mock(UserRepositoryInterface.class);
         when(mockUserRepo.getUser(1)).thenReturn(new User(1, "2001-02-04", "America/Los_Angeles"));
         UserServiceImpl userService = new UserServiceImpl(mockUserRepo);// Inject Mock from constructor.
@@ -30,7 +30,7 @@ public class UserServiceImplTest {
      * Exceptionのテスト
      */
     @Test
-    public void calculateTimeZoneAgeUserNotExist(){
+    public void calculateTimeZoneAgeUserNotExist() {
         UserServiceImpl userService = new UserServiceImpl(mock(UserRepositoryInterface.class));
         try {
             userService.calculateTimeZoneAge(2);
@@ -45,7 +45,8 @@ public class UserServiceImplTest {
      * テスト内容がUserRepositoryに依存しないので、UserRepositoryのmockを渡す必要すらない
      */
     @Test
-    public void convertLocalDate() throws NoSuchMethodException, SecurityException, IllegalAccessException, IllegalArgumentException, InvocationTargetException{
+    public void convertLocalDate() throws NoSuchMethodException, SecurityException, IllegalAccessException,
+            IllegalArgumentException, InvocationTargetException {
         UserServiceImpl userService = new UserServiceImpl(null);
         Method method = userService.getClass().getDeclaredMethod("convertLocalDate", String.class);
         method.setAccessible(true);
@@ -56,7 +57,8 @@ public class UserServiceImplTest {
     }
 
     @Test
-    public void generateNowLocalDateFromTimeZone() throws NoSuchMethodException, SecurityException, IllegalAccessException, IllegalArgumentException, InvocationTargetException{
+    public void generateNowLocalDateFromTimeZone() throws NoSuchMethodException, SecurityException,
+            IllegalAccessException, IllegalArgumentException, InvocationTargetException {
         UserServiceImpl userService = new UserServiceImpl(null);
         Method method = userService.getClass().getDeclaredMethod("generateNowLocalDateFromTimeZone", String.class);
         method.setAccessible(true);
@@ -65,27 +67,29 @@ public class UserServiceImplTest {
         ZonedDateTime usPacificNow = tokyoNow.minusHours(16);// Diff from US and Tokyo
         assertEquals(result.getYear(), usPacificNow.getYear());
         assertEquals(result.getMonthValue(), usPacificNow.getMonthValue());
-        assertEquals(result.getDayOfYear(),usPacificNow.getDayOfYear());
+        assertEquals(result.getDayOfYear(), usPacificNow.getDayOfYear());
     }
 
     @Test
-    public void calculateYearsBetween() throws NoSuchMethodException, SecurityException, IllegalAccessException, IllegalArgumentException, InvocationTargetException{
+    public void calculateYearsBetween() throws NoSuchMethodException, SecurityException, IllegalAccessException,
+            IllegalArgumentException, InvocationTargetException {
         UserServiceImpl userService = new UserServiceImpl(null);
-        Method method = userService.getClass().getDeclaredMethod("calculateYearsBetween", LocalDate.class, LocalDate.class);
+        Method method = userService.getClass().getDeclaredMethod("calculateYearsBetween", LocalDate.class,
+                LocalDate.class);
         method.setAccessible(true);
-        long result = (long) method.invoke(userService, LocalDate.of(2000, 1, 1), LocalDate.of(2000, 12,31));
+        long result = (long) method.invoke(userService, LocalDate.of(2000, 1, 1), LocalDate.of(2000, 12, 31));
         assertEquals(result, 0);
         // Boarder Test 境界値テスト
-        result = (long) method.invoke(userService, LocalDate.of(2010, 2, 1), LocalDate.of(2020, 1,31));
+        result = (long) method.invoke(userService, LocalDate.of(2010, 2, 1), LocalDate.of(2020, 1, 31));
         assertEquals(result, 9);
-        result = (long) method.invoke(userService, LocalDate.of(2010, 2, 1), LocalDate.of(2020, 2,1));
+        result = (long) method.invoke(userService, LocalDate.of(2010, 2, 1), LocalDate.of(2020, 2, 1));
         assertEquals(result, 10);
         // Leap Year Test うるう年テスト
-        result = (long) method.invoke(userService, LocalDate.of(2008, 2, 29), LocalDate.of(2018, 2,28));
+        result = (long) method.invoke(userService, LocalDate.of(2008, 2, 29), LocalDate.of(2018, 2, 28));
         assertEquals(result, 9);
-        result = (long) method.invoke(userService, LocalDate.of(2008, 2, 29), LocalDate.of(2018, 3,1));
+        result = (long) method.invoke(userService, LocalDate.of(2008, 2, 29), LocalDate.of(2018, 3, 1));
         assertEquals(result, 10);
-        result = (long) method.invoke(userService, LocalDate.of(2008, 2, 29), LocalDate.of(2020, 2,29));
+        result = (long) method.invoke(userService, LocalDate.of(2008, 2, 29), LocalDate.of(2020, 2, 29));
         assertEquals(result, 12);
     }
 }

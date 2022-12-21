@@ -13,7 +13,7 @@ public class UserServiceTest {
     private UserService userService;
 
     @Test
-    public void calculateAge(){
+    public void calculateAge() {
         long age = userService.calculateTimeZoneAge(1);
         assertTrue(age > 35);// 現在時刻に依存して、チェックが難しいので、実装日より将来かどうかだけをチェックする
     }

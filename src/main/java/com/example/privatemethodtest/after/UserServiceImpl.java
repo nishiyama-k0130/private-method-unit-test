@@ -11,14 +11,14 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.ObjectUtils;
 
 @Service
-public class UserServiceImpl implements UserServiceInterface{
+public class UserServiceImpl implements UserServiceInterface {
 
     private UserRepositoryInterface userRepository;
 
     private static final DateTimeFormatter DTF = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 
     @Autowired
-    public UserServiceImpl(UserRepositoryInterface userRepository){
+    public UserServiceImpl(UserRepositoryInterface userRepository) {
         this.userRepository = userRepository;
     }
 
@@ -29,9 +29,9 @@ public class UserServiceImpl implements UserServiceInterface{
      * @param userId
      * @return
      */
-    public long calculateTimeZoneAge(int userId){
+    public long calculateTimeZoneAge(int userId) {
         User user = userRepository.getUser(userId);
-        if (ObjectUtils.isEmpty(user)){
+        if (ObjectUtils.isEmpty(user)) {
             throw new RuntimeException(String.format("UserId does not exist, userId=%s", userId));
         }
         LocalDate birthday = convertLocalDate(user.getBirthday());
@@ -45,17 +45,17 @@ public class UserServiceImpl implements UserServiceInterface{
      * @param dateStr yyyy-MM-dd
      * @return
      */
-    private LocalDate convertLocalDate(String dateStr){
+    private LocalDate convertLocalDate(String dateStr) {
         return LocalDate.parse(dateStr, DTF);
     }
 
-    private LocalDate generateNowLocalDateFromTimeZone(String zoneId){
+    private LocalDate generateNowLocalDateFromTimeZone(String zoneId) {
         ZonedDateTime now = ZonedDateTime.now(ZoneId.of(zoneId));
         LocalDate todayFromZoneId = LocalDate.of(now.getYear(), now.getMonth(), now.getDayOfMonth());
         return todayFromZoneId;
     }
 
-    private long calculateYearsBetween(LocalDate from, LocalDate to){
+    private long calculateYearsBetween(LocalDate from, LocalDate to) {
         return ChronoUnit.YEARS.between(from, to);
     }
 }
