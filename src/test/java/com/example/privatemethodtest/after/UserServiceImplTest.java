@@ -23,11 +23,11 @@ public class UserServiceImplTest {
         when(mockUserRepo.getUser(1)).thenReturn(new User(1, "2001-02-04", "America/Los_Angeles"));
         UserServiceImpl userService = new UserServiceImpl(mockUserRepo);// Inject Mock from constructor.
         long age = userService.calculateTimeZoneAge(1);
-        assertTrue(age > 20);// 現在時刻に依存して、チェックが難しいので、実装日より将来かどうかだけをチェックする
+        assertTrue(age > 20);// This test result depends on system time, so check the age is above at the point of implementation.
     }
 
     /**
-     * Exceptionのテスト
+     * Exception Test
      */
     @Test
     public void calculateTimeZoneAgeUserNotExist() {
@@ -41,13 +41,10 @@ public class UserServiceImplTest {
         assertTrue(false, "Should not reach here");
     }
 
-    /**
-     * テスト内容がUserRepositoryに依存しないので、UserRepositoryのmockを渡す必要すらない
-     */
     @Test
     public void convertLocalDate() throws NoSuchMethodException, SecurityException, IllegalAccessException,
             IllegalArgumentException, InvocationTargetException {
-        UserServiceImpl userService = new UserServiceImpl(null);
+        UserServiceImpl userService = new UserServiceImpl(null);// No need to pass mock, since the method does not depends on Repository class.
         Method method = userService.getClass().getDeclaredMethod("convertLocalDate", String.class);
         method.setAccessible(true);
         LocalDate result = (LocalDate) method.invoke(userService, "2021-01-31");
@@ -79,12 +76,12 @@ public class UserServiceImplTest {
         method.setAccessible(true);
         long result = (long) method.invoke(userService, LocalDate.of(2000, 1, 1), LocalDate.of(2000, 12, 31));
         assertEquals(result, 0);
-        // Boarder Test 境界値テスト
+        // Boarder Test
         result = (long) method.invoke(userService, LocalDate.of(2010, 2, 1), LocalDate.of(2020, 1, 31));
         assertEquals(result, 9);
         result = (long) method.invoke(userService, LocalDate.of(2010, 2, 1), LocalDate.of(2020, 2, 1));
         assertEquals(result, 10);
-        // Leap Year Test うるう年テスト
+        // Leap Year Test
         result = (long) method.invoke(userService, LocalDate.of(2008, 2, 29), LocalDate.of(2018, 2, 28));
         assertEquals(result, 9);
         result = (long) method.invoke(userService, LocalDate.of(2008, 2, 29), LocalDate.of(2018, 3, 1));

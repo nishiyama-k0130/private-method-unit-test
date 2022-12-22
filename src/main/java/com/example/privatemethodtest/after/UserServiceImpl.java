@@ -23,7 +23,6 @@ public class UserServiceImpl implements UserServiceInterface {
     }
 
     /**
-     * Userの住んでいるゾーンでの年齢を計算します。
      * Calculate the User's age on their living ZoneId.
      *
      * @param userId
