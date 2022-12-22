@@ -33,8 +33,8 @@ public class UserServiceImpl implements UserServiceInterface {
         if (ObjectUtils.isEmpty(user)) {
             throw new RuntimeException(String.format("UserId does not exist, userId=%s", userId));
         }
-        LocalDate birthday = convertLocalDate(user.getBirthday());
-        LocalDate todayOnUserZone = generateNowLocalDateFromTimeZone(user.getZoneId());
+        LocalDate birthday = convertLocalDate(user.birthday());
+        LocalDate todayOnUserZone = generateNowLocalDateFromTimeZone(user.zoneId());
         long age = this.calculateYearsBetween(birthday, todayOnUserZone);
         return age;
     }

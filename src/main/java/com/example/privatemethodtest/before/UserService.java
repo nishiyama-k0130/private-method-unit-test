@@ -1,6 +1,7 @@
 package com.example.privatemethodtest.before;
 
 import java.time.LocalDate;
+import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
@@ -36,8 +37,8 @@ public class UserService {
         if (ObjectUtils.isEmpty(user)){
             throw new RuntimeException(String.format("UserId does not exist, userId={}", userId));
         }
-        LocalDate birthday = LocalDate.parse(user.getBirthday(), DTF);// Generate LocalDate from yyyy-MM-dd string.
-        ZonedDateTime now = ZonedDateTime.now(user.getZoneId());// Generate Zoned now on the user's Zone.
+        LocalDate birthday = LocalDate.parse(user.birthday(), DTF);// Generate LocalDate from yyyy-MM-dd string.
+        ZonedDateTime now = ZonedDateTime.now(ZoneId.of(user.zoneId()));// Generate Zoned now on the user's Zone.
         LocalDate todayOnUserZone = LocalDate.of(now.getYear(), now.getMonth(), now.getDayOfMonth());// Generate LocalDate now by extracting date info.
         long age = ChronoUnit.YEARS.between(birthday, todayOnUserZone);// Calculate the years between 2 LocalDates.
         return age;
