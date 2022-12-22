@@ -8,7 +8,7 @@ import org.springframework.stereotype.Repository;
 public class UserRepository {
 
     public User getUser(int id){
-        // mock
+        // mock. Please imagine to access to DB
         return new User(id, "1986-01-30", ZoneId.of("Asia/Tokyo"));
     }
 }
